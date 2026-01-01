@@ -1,5 +1,3 @@
-import fetch from "node-fetch";
-
 export type AnalyzeRequest = {
   code: string;
   language: string;

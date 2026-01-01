@@ -43,6 +43,70 @@ def test_sql_injection_detection():
     
     assert len(result.vulnerabilities) > 0
 
+
+def test_cmd_injection_detection():
+    code = """
+    import os
+    os.system("ping " + user_input)
+    """
+
+    from backend.core.analyzer import CodeAnalyzer
+    analyzer = CodeAnalyzer("", "")
+    result = analyzer.analyze(code, "python")
+
+    assert any(v.type.value == "cmd_injection" for v in result.vulnerabilities)
+
+
+def test_eval_detection():
+    code = """
+    def run(expr):
+        return eval(expr)
+    """
+
+    from backend.core.analyzer import CodeAnalyzer
+    analyzer = CodeAnalyzer("", "")
+    result = analyzer.analyze(code, "python")
+
+    assert any(v.type.value == "dangerous_eval" for v in result.vulnerabilities)
+
+
+def test_yaml_load_detection():
+    code = """
+    import yaml
+    cfg = yaml.load(data)
+    """
+
+    from backend.core.analyzer import CodeAnalyzer
+    analyzer = CodeAnalyzer("", "")
+    result = analyzer.analyze(code, "python")
+
+    assert any(v.type.value == "insecure_yaml" for v in result.vulnerabilities)
+
+
+def test_pickle_deserialization_detection():
+    code = """
+    import pickle
+    obj = pickle.loads(data)
+    """
+
+    from backend.core.analyzer import CodeAnalyzer
+    analyzer = CodeAnalyzer("", "")
+    result = analyzer.analyze(code, "python")
+
+    assert any(v.type.value == "deserialization" for v in result.vulnerabilities)
+
+
+def test_hardcoded_secret_detection():
+    code = """
+    SECRET_KEY = "sk_live_123"
+    """
+
+    from backend.core.analyzer import CodeAnalyzer
+    analyzer = CodeAnalyzer("", "")
+    result = analyzer.analyze(code, "python")
+
+    assert any(v.type.value == "hard_coded_secret" for v in result.vulnerabilities)
+
 # ===== FILE 7: demo.py - POC Demo =====
 """
 SecureCopilot POC Demo

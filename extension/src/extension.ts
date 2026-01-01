@@ -2,13 +2,34 @@ import * as vscode from "vscode";
 
 import { analyze } from "./api";
 
-const API_BASE = "http://localhost:8000";
 const output = vscode.window.createOutputChannel("SecureCopilot");
+const diagnostics = vscode.languages.createDiagnosticCollection("securecopilot");
 
 function mapLanguage(languageId: string): string | undefined {
   if (languageId === "c" || languageId === "cpp") return languageId;
   if (languageId === "python") return "python";
   return undefined;
+}
+
+function getApiBase(): string {
+  const config = vscode.workspace.getConfiguration("securecopilot", documentUri());
+  return config.get<string>("apiBase", "http://localhost:8000");
+}
+
+function documentUri(): vscode.Uri | undefined {
+  return vscode.window.activeTextEditor?.document.uri;
+}
+
+function severityToDiagnostic(severity: string): vscode.DiagnosticSeverity {
+  switch (severity.toLowerCase()) {
+    case "critical":
+    case "high":
+      return vscode.DiagnosticSeverity.Error;
+    case "medium":
+      return vscode.DiagnosticSeverity.Warning;
+    default:
+      return vscode.DiagnosticSeverity.Information;
+  }
 }
 
 async function runAnalyze(document: vscode.TextDocument, selection?: vscode.Selection) {
@@ -23,10 +44,11 @@ async function runAnalyze(document: vscode.TextDocument, selection?: vscode.Sele
   }
 
   output.clear();
+  diagnostics.clear();
   output.appendLine(`Analyzing ${document.fileName}...`);
 
   try {
-    const result = await analyze(API_BASE, {
+    const result = await analyze(getApiBase(), {
       code,
       language,
       file_path: document.fileName,
@@ -43,6 +65,7 @@ async function runAnalyze(document: vscode.TextDocument, selection?: vscode.Sele
       `SecureCopilot: phát hiện ${result.vulnerabilities.length} lỗ hổng. Xem output panel.`
     );
 
+    const diagList: vscode.Diagnostic[] = [];
     result.vulnerabilities.forEach((vuln, idx) => {
       output.appendLine(`[#${idx + 1}] ${vuln.type.toUpperCase()} (${vuln.severity})`);
       output.appendLine(`- Lines ${vuln.line_start}-${vuln.line_end}`);
@@ -50,7 +73,24 @@ async function runAnalyze(document: vscode.TextDocument, selection?: vscode.Sele
       output.appendLine(`- Explanation: ${vuln.explanation}`);
       output.appendLine(`- Fix: ${vuln.suggested_fix}`);
       output.appendLine("");
+
+      const offset = selection ? selection.start.line : 0;
+      const startLine = Math.max(0, offset + vuln.line_start - 1);
+      const endLine = Math.max(0, offset + vuln.line_end - 1);
+      const range = new vscode.Range(
+        new vscode.Position(startLine, 0),
+        new vscode.Position(endLine, Number.MAX_SAFE_INTEGER)
+      );
+      const diag = new vscode.Diagnostic(
+        range,
+        `${vuln.type.toUpperCase()}: ${vuln.explanation}`,
+        severityToDiagnostic(vuln.severity)
+      );
+      diag.source = "SecureCopilot";
+      diagList.push(diag);
     });
+
+    diagnostics.set(document.uri, diagList);
 
     output.show(true);
   } catch (err: any) {
@@ -81,6 +121,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(analyzeSelection, analyzeFile, output);
+  context.subscriptions.push(diagnostics);
 }
 
 export function deactivate() {}

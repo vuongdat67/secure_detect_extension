@@ -16,3 +16,7 @@ npm run watch
 uvicorn backend.api.main:app --reload
 
 pytest
+
+npx vsce package
+
+code --install-extension securecopilot-0.1.0.vsix 

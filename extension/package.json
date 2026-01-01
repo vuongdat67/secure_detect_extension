@@ -8,21 +8,52 @@
   },
   "categories": ["Linters"],
   "activationEvents": [
-    "onCommand:securecopilot.analyzeSelection",
-    "onCommand:securecopilot.analyzeFile"
+    "*"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "securecopilot.analyzeSelection",
-        "title": "SecureCopilot: Analyze Selection"
+        "title": "SecureCopilot: Analyze Selection",
+        "category": "SecureCopilot"
       },
       {
         "command": "securecopilot.analyzeFile",
-        "title": "SecureCopilot: Analyze Current File"
+        "title": "SecureCopilot: Analyze Current File",
+        "category": "SecureCopilot"
       }
-    ]
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "securecopilot.analyzeSelection",
+          "group": "navigation@100"
+        },
+        {
+          "command": "securecopilot.analyzeFile",
+          "group": "navigation@101"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "securecopilot.analyzeFile",
+          "group": "navigation@100"
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "SecureCopilot",
+      "properties": {
+        "securecopilot.apiBase": {
+          "type": "string",
+          "default": "http://localhost:8000",
+          "description": "Base URL của SecureCopilot API (vd: http://localhost:8000)",
+          "scope": "resource"
+        }
+      }
+    }
   },
   "scripts": {
     "compile": "tsc -p ./",
@@ -34,7 +65,5 @@
     "@types/vscode": "^1.85.0",
     "typescript": "^5.6.3"
   },
-  "dependencies": {
-    "node-fetch": "^3.3.2"
-  }
+  "dependencies": {}
 }
