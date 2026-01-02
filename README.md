@@ -1,22 +1,105 @@
+# Usage Guide
 
-# .Venv
+## 1. Backend Setup (Python)
 
-```py
+### Create virtual environment
+```bash
 python -m venv .venv
+````
+
+Activate venv:
+
+* **Windows**
+
+```bash
+.venv\Scripts\activate
 ```
-```py
+
+* **Linux / macOS**
+
+```bash
+source .venv/bin/activate
+```
+
+### Install dependencies
+
+```bash
 pip install -r requirements.txt
 ```
 
-npm install
-npm compile
-npm run watch
+### Run backend API
 
-
+```bash
 uvicorn backend.api.main:app --reload
+```
 
+---
+
+## 2. VS Code Extension Setup (Node.js)
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Compile & watch extension
+
+```bash
+npm run compile
+npm run watch
+```
+
+> Press **F5** to start **Extension Development Host** for debugging.
+
+---
+
+## 3. Run Tests
+
+```bash
 pytest
+```
 
+---
+
+## 4. Package & Install Extension
+
+> Make sure `vsce` is installed:
+
+```bash
+npm install -g @vscode/vsce
+```
+
+### Package extension
+
+```bash
 npx vsce package
+```
 
-code --install-extension securecopilot-0.1.0.vsix 
+### Install extension
+
+```bash
+code --install-extension securecopilot-0.1.0.vsix
+```
+
+---
+
+## 5. Demo
+
+🎥 Demo video:
+[https://youtu.be/wWT4fWxwOhU](https://youtu.be/wWT4fWxwOhU)
+
+## 6. Resource model
+
+[Model folder](https://drive.google.com/file/d/1lrfN5c5rmJzP0ou4JCOVPpbOZ0grS4F8/view?usp=sharing)
+
+---
+
+## Notes
+
+* This project is a **demo / proof of concept**
+* Features are **not fully implemented**
+* Some edge cases may not be covered
+
+Thanks.
+
