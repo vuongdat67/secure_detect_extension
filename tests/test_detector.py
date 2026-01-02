@@ -146,3 +146,16 @@ def test_detects_crypto_misuse():
 
     assert len(vulns) == 1
     assert vulns[0].type.value == "crypto_misuse"
+
+
+def test_detects_asm_buffer_overflow():
+    detector = _build_detector()
+    code = """
+    ; simple copy loop
+    rep movsb ; no bounds check
+    """
+
+    vulns = detector.detect_buffer_overflow(code, "asm")
+
+    assert vulns
+    assert any(v.type.value == "buffer_overflow" for v in vulns)

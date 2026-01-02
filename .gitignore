@@ -9,3 +9,5 @@ __pycache__/
 bug.txt
 .github/
 *.c
+.pytest_cache/
+bin/

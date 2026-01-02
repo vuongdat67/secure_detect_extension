@@ -1,6 +1,6 @@
 """FastAPI entrypoint for SecureCopilot."""
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from ..config import settings
@@ -48,16 +48,17 @@ def health_check():
 
 @app.post("/api/v1/analyze", response_model=AnalyzeResponse)
 def analyze_code(request: AnalyzeRequest):
-    supported = {"c", "cpp", "python"}
-    if request.language not in supported:
+    lang = (request.language or "").lower()
+    supported = {"c", "cpp", "python", "asm", "s", "assembly"}
+    if lang not in supported:
         raise HTTPException(
             status_code=400,
-            detail=f"Unsupported language. Supported: {sorted(supported)}",
+            detail=f"Unsupported language '{request.language}'. Supported: {sorted(supported)}",
         )
 
     result = analyzer.analyze(
         code=request.code,
-        language=request.language,
+        language=lang,
         file_path=request.file_path,
     )
 

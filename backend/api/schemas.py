@@ -2,7 +2,7 @@
 
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from ..core.models import AnalysisResult
 
@@ -24,7 +24,7 @@ class VulnerabilityResponse(BaseModel):
     suggested_fix: str
     confidence: float
     cwe_id: Optional[str] = None
-    references: List[str] = []
+    references: List[str] = Field(default_factory=list)
 
 
 class AnalyzeResponse(BaseModel):

@@ -36,7 +36,7 @@ class CodeAnalyzer:
         
         Args:
             code: Source code to analyze
-            language: Programming language (c, python, cpp)
+            language: Programming language (c, python, cpp, asm, s)
             file_path: Optional file path for context
             
         Returns:

@@ -15,8 +15,9 @@ def _env_bool(name: str, default: bool = False) -> bool:
 
 @dataclass
 class Settings:
-    model_path_asm: Path = MODEL_DIR / "assembly" / "checkpoint-last"
-    model_path_py: Path = MODEL_DIR / "python" / "checkpoint-last"
+    # Prefer best-rouge checkpoints as requested
+    model_path_asm: Path = MODEL_DIR / "assembly" / "checkpoint-best-rouge"
+    model_path_py: Path = MODEL_DIR / "python" / "checkpoint-best-rouge"
     load_models: bool = _env_bool("SECURECOPILOT_LOAD_MODELS", False)
 
 

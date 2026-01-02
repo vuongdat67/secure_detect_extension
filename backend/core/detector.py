@@ -116,34 +116,68 @@ class VulnerabilityDetector:
         vulnerabilities = []
         lines = code.split('\n')
         
+        # C/C++ heuristics (unsafe C library calls)
         for pattern in self.patterns[VulnType.BUFFER_OVERFLOW]:
             for i, line in enumerate(lines):
                 if re.search(pattern, line):
-                    # Extract vulnerable code
                     code_snippet = line.strip()
-                    
-                    # Get explanation from ExploitGen
                     explanation = self.engine.explain_behavior(code_snippet, language)
-                    
-                    # Create vulnerability
-                    vuln = Vulnerability(
-                        id=f"BO-{i}",
-                        type=VulnType.BUFFER_OVERFLOW,
-                        severity=Severity.CRITICAL,
-                        line_start=i + 1,
-                        line_end=i + 1,
-                        code_snippet=code_snippet,
-                        explanation=explanation,
-                        suggested_fix=self._suggest_fix_buffer_overflow(code_snippet),
-                        confidence=0.85,
-                        cwe_id="CWE-120",
-                        references=[
-                            "https://cwe.mitre.org/data/definitions/120.html"
-                        ]
+
+                    vulnerabilities.append(
+                        Vulnerability(
+                            id=f"BO-{i}",
+                            type=VulnType.BUFFER_OVERFLOW,
+                            severity=Severity.CRITICAL,
+                            line_start=i + 1,
+                            line_end=i + 1,
+                            code_snippet=code_snippet,
+                            explanation=explanation,
+                            suggested_fix=self._suggest_fix_buffer_overflow(code_snippet),
+                            confidence=0.85,
+                            cwe_id="CWE-120",
+                            references=["https://cwe.mitre.org/data/definitions/120.html"],
+                        )
                     )
-                    vulnerabilities.append(vuln)
-        
+
+        # Assembly heuristics: unbounded moves/stores without length guard
+        if language in {"asm", "s", "assembly"}:
+            asm_patterns = [
+                r"\bstos[bwdq]\b",       # STOSB/ STOSW / STOSD / STOSQ
+                r"\bmovs[bwdq]\b",       # MOVSB / MOVSW / MOVSD / MOVSQ
+                r"rep\s+stos[bwdq]",      # REP STOS*
+                r"rep\s+movs[bwdq]",      # REP MOVS*
+            ]
+
+            for i, line in enumerate(lines):
+                if any(re.search(pat, line, re.IGNORECASE) for pat in asm_patterns):
+                    code_snippet = line.strip()
+
+                    vulnerabilities.append(
+                        Vulnerability(
+                            id=f"BO-ASM-{i}",
+                            type=VulnType.BUFFER_OVERFLOW,
+                            severity=Severity.CRITICAL,
+                            line_start=i + 1,
+                            line_end=i + 1,
+                            code_snippet=code_snippet,
+                            explanation=(
+                                "Assembly copy without explicit bound check; ensure ECX/RCX length "
+                                "and destination bounds are validated before STOS/MOVS."
+                            ),
+                            suggested_fix=(
+                                "Guard copy with length counters (ECX/RCX) and compare against buffer size; "
+                                "avoid REP MOVS/STOS on untrusted length."
+                            ),
+                            confidence=0.65,
+                            cwe_id="CWE-119",
+                            references=["https://cwe.mitre.org/data/definitions/119.html"],
+                        )
+                    )
+
         return vulnerabilities
+
+        
+        
     
     def detect_format_string(self, code: str, language: str) -> List[Vulnerability]:
         """Detect format string vulnerabilities"""
