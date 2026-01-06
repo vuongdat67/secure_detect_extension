@@ -91,7 +91,7 @@ code --install-extension securecopilot-0.1.0.vsix
 
 ## 6. Resource model
 
-[Model folder](https://drive.google.com/file/d/1lrfN5c5rmJzP0ou4JCOVPpbOZ0grS4F8/view?usp=sharing)
+[Model folder](https://drive.google.com/file/d/1KUYjf7CJHov_03QcQ7OZX5hqmQ-BBNtS/view?usp=sharing)
 
 ---
 
